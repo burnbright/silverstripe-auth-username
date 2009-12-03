@@ -20,6 +20,7 @@ class UsernameMemberDecorator extends DataObjectDecorator{
 		do{
 			$username = strtolower(substr($member->FirstName,0,$count).$member->Surname);
 			if(strlen($member->FirstName) <= $count) $username .= $count;
+			$username = str_replace (" ", "", $username);
 			$count++;
 		}while(DataObject::get_one('Member',"Username = '$username'"));
 		return $username;
