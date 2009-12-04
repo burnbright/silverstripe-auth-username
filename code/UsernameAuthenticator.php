@@ -96,7 +96,7 @@ class UsernameAuthenticator extends Authenticator {
    *              method
    */
   public static function get_login_form(Controller $controller) {
-    return Object::create("UsernameLoginForm", $controller, "LoginForm");
+    return Object::create("UsernameLoginForm", $controller, "UsernameLoginForm");
   }
 
 
