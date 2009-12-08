@@ -34,6 +34,8 @@ class UsernameLoginForm extends MemberLoginForm {
 		}
 	}
 
+	//TODO: add "lost username link"
+	//TODO: modify lost password to ask for either email or username
 
 }
 ?>

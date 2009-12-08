@@ -24,7 +24,16 @@ class UsernameMemberDecorator extends DataObjectDecorator{
 			$count++;
 		}while(DataObject::get_one('Member',"Username = '$username'"));
 		return $username;
-	}	
+	}
+	
+	function GenerateAndSetPassword(){
+		if(!Permission::check("ADMIN")){return false;}
+		$member = $this->getOwner();
+		$password = substr(md5(microtime()),0,6);
+		$member->changePassword($password);
+		return $password;
+	}
+
 }
 
 
