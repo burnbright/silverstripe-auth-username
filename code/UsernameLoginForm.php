@@ -6,16 +6,16 @@ class UsernameLoginForm extends MemberLoginForm {
 
 	protected $authenticator_class = 'UsernameAuthenticator';
 	
-	
 	function __construct($controller, $name, $fields = null, $actions = null,$checkCurrentUser = true) {
-										 	
-		
-			parent::__construct($controller, $name, $fields = null, $actions = null, $checkCurrentUser = true);
+		parent::__construct($controller, $name, $fields = null, $actions = null, $checkCurrentUser = true);
 			
-			$this->Fields()->fieldByName('Email')->setTitle('Username');							 	
+	/*	$this->actions->push(new LiteralField(
+					'forgotUsername',
+					'<p id="ForgotUsername"><a href="UsernameLoginForm/lostusername">' ."I've lost my username" . '</a></p>'
+				));*/	
+		$this->Fields()->fieldByName('Email')->setTitle('Username');							 	
 	}
 	
-
   /**
    * Try to authenticate the user
    *
@@ -37,5 +37,6 @@ class UsernameLoginForm extends MemberLoginForm {
 	//TODO: add "lost username link"
 	//TODO: modify lost password to ask for either email or username
 
+	
 }
 ?>
