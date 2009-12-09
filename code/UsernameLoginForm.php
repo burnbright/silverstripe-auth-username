@@ -13,7 +13,10 @@ class UsernameLoginForm extends MemberLoginForm {
 					'forgotUsername',
 					'<p id="ForgotUsername"><a href="UsernameLoginForm/lostusername">' ."I've lost my username" . '</a></p>'
 				));*/	
-		$this->Fields()->fieldByName('Email')->setTitle('Username');							 	
+		
+		if($field = $this->Fields()->fieldByName('Email')){
+			$field->setTitle('Username');
+		}							 	
 	}
 	
   /**
