@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * Member decorator to add a Username database field.
+ * 
+ * @author Jeremy Shipman <jeremy@burnbright.co.nz> www.burnbright.co.nz
+ */
 class UsernameMemberDecorator extends DataObjectDecorator{
 	
 	function extraStatics(){

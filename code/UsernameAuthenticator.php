@@ -1,6 +1,8 @@
 <?php
 /**
  * Alternative username authentication method.
+ * 
+ * @author Jeremy Shipman <jeremy@burnbright.co.nz> www.burnbright.co.nz
  **/
 class UsernameAuthenticator extends Authenticator {
 

@@ -1,6 +1,8 @@
 <?php
 /**
  * Login form for username login
+ * 
+ * @author Jeremy Shipman <jeremy@burnbright.co.nz> www.burnbright.co.nz
  */
 class UsernameLoginForm extends MemberLoginForm {
 
