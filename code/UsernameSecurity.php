@@ -110,6 +110,7 @@ class UsernameSecurity extends Security{
 		$tmpPage = new Page();
 		$tmpPage->Title = _t('Security.LOSTPASSWORDHEADER');
 		$tmpPage->URLSegment = 'UsernameSecurity';
+		$tmpPage->ID = -1;
 		$controller = new Page_Controller($tmpPage);
 		$controller->init();
 
@@ -138,6 +139,7 @@ class UsernameSecurity extends Security{
 		$tmpPage = new Page();
 		$tmpPage->Title = _t('Security.LOSTPASSWORDHEADER');
 		$tmpPage->URLSegment = 'UsernameSecurity';
+		$tmpPage->ID = -1;
 		$controller = new Page_Controller($tmpPage);
 		$controller->init();
 
