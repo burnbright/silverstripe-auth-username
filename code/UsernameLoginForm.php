@@ -15,7 +15,6 @@ class UsernameLoginForm extends MemberLoginForm {
 		
 		parent::__construct($controller, $name, $fields, $actions, $checkCurrentUser);
 				
-		
 		if($removeemail && $field = $this->Fields()->fieldByName('Email')){
 			$field->setTitle('Username');
 		}
@@ -27,8 +26,6 @@ class UsernameLoginForm extends MemberLoginForm {
 		}
 		
 	}
-	
-
 	
   /**
    * Try to authenticate the user
@@ -47,10 +44,6 @@ class UsernameLoginForm extends MemberLoginForm {
 			return null;
 		}
 	}
-
-	//TODO: add "lost username link"
-	//TODO: modify lost password to ask for either email or username
-
 
 	/**
 	 * Forgot password form handler method
@@ -93,8 +86,6 @@ class UsernameLoginForm extends MemberLoginForm {
 		}
 	}
 	
-	
-	
 	function forgotUsername($data) {
 		$SQL_data = Convert::raw2sql($data);
 		$SQL_email = $SQL_data['Email'];
@@ -103,10 +94,8 @@ class UsernameLoginForm extends MemberLoginForm {
 		if($members) {
 
 			$member = $members->First();
-			
 			$e = Object::create('MemberForgotUsernameEmail');
 			
-			//$e->Usernames = implode($members->map('ID','Username'),',');
 			$e->Members = $members;
 			$e->populateTemplate($member);
 			$e->setTo($member->Email);

@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * UsernameSecurity is an extension of Security, to allow requesting and sending out lost usernames or passwords.
+ * 
+ * @author Jeremy Shipman <jeremy@burnbright.co.nz> www.burnbright.co.nz
+ */
+
 class UsernameSecurity extends Security{
 	
 	
@@ -33,7 +39,6 @@ class UsernameSecurity extends Security{
 			'Form' => $this->LostPasswordForm()->forTemplate().'<br/>'.$this->LostUsernameForm()->forTemplate()
 		));
 		
-		//Controller::$currentController = $controller;
 		return $customisedController->renderWith(array('UsernameSecurity_lostpassword', 'Security', $this->stat('template_main')));
 	}
 	
