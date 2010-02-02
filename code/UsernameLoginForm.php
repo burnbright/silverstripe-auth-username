@@ -16,7 +16,11 @@ class UsernameLoginForm extends MemberLoginForm {
 		parent::__construct($controller, $name, $fields, $actions, $checkCurrentUser);
 				
 		if($removeemail && $field = $this->Fields()->fieldByName('Email')){
-			$field->setTitle('Username');
+			$this->Fields()->insertBefore(
+				new TextField("Username", _t('Member.USERNAME', 'Username'), Session::get('SessionForms.MemberLoginForm.Username'), null, $this),
+				'Email'
+			);
+			$this->Fields()->removeByName('Email');
 		}
 		
 		if($field = $this->Actions()->fieldByName('forgotPassword')){
@@ -44,6 +48,76 @@ class UsernameLoginForm extends MemberLoginForm {
 			return null;
 		}
 	}
+	
+	
+	
+	/**
+	 * Login form handler method
+	 *
+	 * This method is called when the user clicks on "Log in"
+	 *
+	 * @param array $data Submitted data
+	 */
+	public function dologin($data) {
+		if($this->performLogin($data)) {
+			Session::clear('SessionForms.MemberLoginForm.Username');
+			Session::clear('SessionForms.MemberLoginForm.Remember');
+			if(Member::currentUser()->isPasswordExpired()) {
+				if(isset($_REQUEST['BackURL']) && $backURL = $_REQUEST['BackURL']) {
+					Session::set('BackURL', $backURL);
+				}
+
+				$cp = new ChangePasswordForm($this->controller, 'ChangePasswordForm');
+				$cp->sessionMessage('Your password has expired.  Please choose a new one.', 'good');
+				
+				Director::redirect('Security/changepassword');
+			} elseif(
+				isset($_REQUEST['BackURL']) 
+				&& $_REQUEST['BackURL'] 
+				// absolute redirection URLs may cause spoofing 
+				&& Director::is_site_url($_REQUEST['BackURL'])
+			) {
+				Director::redirect($_REQUEST['BackURL']);
+			} else {
+				$member = Member::currentUser();
+				if($member) {
+					$firstname = Convert::raw2xml($member->FirstName);
+					
+					if(!empty($data['Remember'])) {
+						Session::set('SessionForms.MemberLoginForm.Remember', '1');
+						$member->logIn(true);
+					} else {
+						$member->logIn();
+					}
+					
+					Session::set('Security.Message.message',
+						sprintf(_t('Member.WELCOMEBACK', "Welcome Back, %s"), $firstname) 
+					);
+					Session::set("Security.Message.type", "good");
+				}
+				Director::redirectBack();
+			}
+		} else {
+			Session::set('SessionForms.MemberLoginForm.Username', $data['Username']);
+			Session::set('SessionForms.MemberLoginForm.Remember', isset($data['Remember']));
+
+			if(isset($_REQUEST['BackURL'])) $backURL = $_REQUEST['BackURL']; 
+			else $backURL = null; 
+
+		 	if($backURL) Session::set('BackURL', $backURL);			
+			
+			if($badLoginURL = Session::get("BadLoginURL")) {
+				Director::redirect($badLoginURL);
+			} else {
+				// Show the right tab on failed login
+				$loginLink = Director::absoluteURL(Security::Link("login")); 
+				if($backURL) $loginLink .= '?BackURL=' . urlencode($backURL); 
+				Director::redirect($loginLink . '#' . $this->FormName() .'_tab');
+			}
+		}
+	}
+	
+	
 
 	/**
 	 * Forgot password form handler method
@@ -66,8 +140,8 @@ class UsernameLoginForm extends MemberLoginForm {
 					'PasswordResetLink' => Security::getPasswordResetLink($member->AutoLoginHash)
 				)
 			);
-
-			Director::redirect('UsernameSecurity/passwordsent/' . urlencode($data['Username']));
+			Session::set('ForgotUsername',$data['Username']);
+			Director::redirect('UsernameSecurity/passwordsent/');
 		} elseif($data['Username']) {
 			$this->sessionMessage(
 				_t('Member.ERRORSIGNUP', 'Sorry, but I don\'t recognise the username. Try again, or contact us to resolve this.'
@@ -100,8 +174,8 @@ class UsernameLoginForm extends MemberLoginForm {
 			$e->populateTemplate($member);
 			$e->setTo($member->Email);
 			$e->send();
-
-			Director::redirect('UsernameSecurity/usernamesent/'. urlencode($data['Email']));
+			Session::set('ForgotEmail',$data['Email']);
+			Director::redirect('UsernameSecurity/usernamesent/');
 		} elseif($data['Email']) {
 			$this->sessionMessage(
 				_t('Member.ERRORSIGNUP', 'Sorry, but I don\'t recognise the email. Try again, or contact us to resolve this.'

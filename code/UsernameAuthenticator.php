@@ -18,11 +18,11 @@ class UsernameAuthenticator extends Authenticator {
    * @see Security::setDefaultAdmin()
    */
   public static function authenticate($RAW_data, Form $form = null) {
-    $SQL_user = Convert::raw2sql($RAW_data['Email']);
+    $SQL_user = Convert::raw2sql($RAW_data['Username']);
 	$isLockedOut = false;
 
 	// Default login (see Security::setDefaultAdmin())
-	if(Security::check_default_admin($RAW_data['Email'], $RAW_data['Password'])) {
+	if(Security::check_default_admin($RAW_data['Username'], $RAW_data['Password'])) {
 		$member = Security::findAnAdministrator();
 	} else {		
 		$member = DataObject::get_one("Member", "Username = '$SQL_user' AND Password IS NOT NULL"); // "Username" used here instead of "Email"
@@ -66,7 +66,8 @@ class UsernameAuthenticator extends Authenticator {
 			return false;
 		}
 		
-		$attempt->Email = $RAW_data['Email'];
+		//$attempt->Email = $RAW_data['Email'];
+		$attempt->Username = $RAW_data['Username'];
 		$attempt->IP = Controller::curr()->getRequest()->getIP();
 		$attempt->write();
 	}

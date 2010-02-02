@@ -119,7 +119,8 @@ class UsernameSecurity extends Security{
 		$controller = new Page_Controller($tmpPage);
 		$controller->init();
 
-		$username = Convert::raw2xml($request->param('ID') . '.' . $request->getExtension());
+		$username = (Session::get('ForgotUsername')) ? Convert::raw2xml(Session::get('ForgotUsername')) : null;
+		Session::clear('ForgotUsername');
 		
 		$customisedController = $controller->customise(array(
 			'Title' => _t('Security.USERNAMEPASSWORDSENTHEADER', "Password reset link has been sent"),
@@ -134,7 +135,7 @@ class UsernameSecurity extends Security{
 	}
 	
 	
-		public function usernamesent($request) {
+	public function usernamesent($request) {
 		Requirements::javascript(THIRDPARTY_DIR . '/behaviour.js');
 		Requirements::javascript(THIRDPARTY_DIR . '/loader.js');
 		Requirements::javascript(THIRDPARTY_DIR . '/prototype.js');
@@ -147,8 +148,9 @@ class UsernameSecurity extends Security{
 		$tmpPage->ID = -1;
 		$controller = new Page_Controller($tmpPage);
 		$controller->init();
-
-		$email = Convert::raw2xml($request->param('ID') . '.' . $request->getExtension());
+		
+		$email = (Session::get('ForgotEmail')) ? Convert::raw2xml(Session::get('ForgotEmail')) : null;
+		Session::clear('ForgotEmail');
 		
 		$customisedController = $controller->customise(array(
 			'Title' => _t('Security.USERNAMESENTHEADER', "Username sent"),
