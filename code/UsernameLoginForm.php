@@ -18,7 +18,7 @@ class UsernameLoginForm extends MemberLoginForm {
 		if($removeemail && $field = $this->Fields()->fieldByName('Email')){
 			$this->Fields()->insertBefore(
 				new TextField("Username", _t('Member.USERNAME', 'Username'), Session::get('SessionForms.MemberLoginForm.Username'), null, $this),
-				'Email'
+				'Password'
 			);
 			$this->Fields()->removeByName('Email');
 		}

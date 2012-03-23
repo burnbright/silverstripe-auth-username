@@ -6,9 +6,6 @@ DataObject::add_extension('Member', 'UsernameMemberDecorator');
 DataObject::add_extension('LoginAttempt', 'UsernameLoginAttempt');
 
 //add username field to MemberTableField
-MemberTableField::addMembershipFields(array(
+/*MemberTableField::addMembershipFields(array(
 	'Username' => 'Username'
-));
-
-
-?>
+));*/
