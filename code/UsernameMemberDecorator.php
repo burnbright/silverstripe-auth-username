@@ -4,15 +4,11 @@
  * 
  * @author Jeremy Shipman <jeremy@burnbright.co.nz> www.burnbright.co.nz
  */
-class UsernameMemberDecorator extends DataObjectDecorator{
+class UsernameMemberDecorator extends DataExtension{
 	
-	function extraStatics(){
-		return array(
-			'db' => array(
-				'Username' => 'Varchar'
-			)
-		);
-	}
+	static $db = array(
+					'Username' => 'Varchar'
+				);
 	
 	/**
 	 * Generates a username in the form: FSurname , where F is the first letter of the member's first name
@@ -39,6 +35,3 @@ class UsernameMemberDecorator extends DataObjectDecorator{
 	}
 
 }
-
-
-?>

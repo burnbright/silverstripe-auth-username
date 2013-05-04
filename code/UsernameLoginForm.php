@@ -70,14 +70,14 @@ class UsernameLoginForm extends MemberLoginForm {
 				$cp = new ChangePasswordForm($this->controller, 'ChangePasswordForm');
 				$cp->sessionMessage('Your password has expired.  Please choose a new one.', 'good');
 				
-				Director::redirect('Security/changepassword');
+				$this->Controller()->redirect('Security/changepassword');
 			} elseif(
 				isset($_REQUEST['BackURL']) 
 				&& $_REQUEST['BackURL'] 
 				// absolute redirection URLs may cause spoofing 
 				&& Director::is_site_url($_REQUEST['BackURL'])
 			) {
-				Director::redirect($_REQUEST['BackURL']);
+				$this->Controller()->redirect($_REQUEST['BackURL']);
 			} else {
 				$member = Member::currentUser();
 				if($member) {
@@ -95,7 +95,7 @@ class UsernameLoginForm extends MemberLoginForm {
 					);
 					Session::set("Security.Message.type", "good");
 				}
-				Director::redirectBack();
+				$this->Controller()->redirectBack();
 			}
 		} else {
 			Session::set('SessionForms.MemberLoginForm.Username', $data['Username']);
@@ -107,12 +107,12 @@ class UsernameLoginForm extends MemberLoginForm {
 		 	if($backURL) Session::set('BackURL', $backURL);			
 			
 			if($badLoginURL = Session::get("BadLoginURL")) {
-				Director::redirect($badLoginURL);
+				$this->Controller()->redirect($badLoginURL);
 			} else {
 				// Show the right tab on failed login
 				$loginLink = Director::absoluteURL(Security::Link("login")); 
 				if($backURL) $loginLink .= '?BackURL=' . urlencode($backURL); 
-				Director::redirect($loginLink . '#' . $this->FormName() .'_tab');
+				$this->Controller()->redirect($loginLink . '#' . $this->FormName() .'_tab');
 			}
 		}
 	}
@@ -141,7 +141,7 @@ class UsernameLoginForm extends MemberLoginForm {
 				)
 			);
 			Session::set('ForgotUsername',$data['Username']);
-			Director::redirect('UsernameSecurity/passwordsent/');
+			$this->Controller()->redirect('UsernameSecurity/passwordsent/');
 		} elseif($data['Username']) {
 			$this->sessionMessage(
 				_t('Member.ERRORSIGNUP', 'Sorry, but I don\'t recognise the username. Try again, or contact us to resolve this.'
@@ -149,14 +149,14 @@ class UsernameLoginForm extends MemberLoginForm {
 				'bad'
 			);
 			
-			Director::redirectBack();
+			$this->Controller()->redirectBack();
 		} else {
 			$this->sessionMessage(
 				_t('Member.ENTEREMAIL', 'Please enter a username address to get a password reset link.'),
 				'bad'
 			);
 			
-			Director::redirect('UsernameSecurity/amnesia');
+			$this->Controller()->redirect('UsernameSecurity/amnesia');
 		}
 	}
 	
@@ -175,7 +175,7 @@ class UsernameLoginForm extends MemberLoginForm {
 			$e->setTo($member->Email);
 			$e->send();
 			Session::set('ForgotEmail',$data['Email']);
-			Director::redirect('UsernameSecurity/usernamesent/');
+			$this->Controller()->redirect('UsernameSecurity/usernamesent/');
 		} elseif($data['Email']) {
 			$this->sessionMessage(
 				_t('Member.ERRORSIGNUP', 'Sorry, but I don\'t recognise the email. Try again, or contact us to resolve this.'
@@ -183,14 +183,14 @@ class UsernameLoginForm extends MemberLoginForm {
 				'bad'
 			);
 			
-			Director::redirectBack();
+			$this->Controller()->redirectBack();
 		} else {
 			$this->sessionMessage(
 				_t('Member.ENTERUSERNAMEEMAIL', 'Please enter an email address to get usernames.'),
 				'bad'
 			);
 			
-			Director::redirect('UsernameSecurity/amnesia');
+			$this->Controller()->redirect('UsernameSecurity/amnesia');
 		}
 	}
 
