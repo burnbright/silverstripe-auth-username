@@ -165,7 +165,7 @@ class UsernameLoginForm extends MemberLoginForm {
 		$SQL_email = $SQL_data['Email'];
 		$members = DataObject::get('Member', "Email = '{$SQL_email}'");
 
-		if($members) {
+		if($members && $members->exists()) {
 
 			$member = $members->First();
 			$e = Object::create('MemberForgotUsernameEmail');
