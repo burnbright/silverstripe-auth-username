@@ -1,7 +1,7 @@
 <?php
 /**
  * Alternative username authentication method.
- * 
+ *
  * @author Jeremy Shipman <jeremy@burnbright.co.nz> www.burnbright.co.nz
  **/
 class UsernameAuthenticator extends Authenticator {
@@ -26,7 +26,7 @@ class UsernameAuthenticator extends Authenticator {
 		$member = Security::findAnAdministrator();
 	} else {
                 $member = DataObject::get_one(
-			"Member", 
+			"Member",
 			"\"username\" = '$SQL_user' AND \"Password\" IS NOT NULL"
 		);
 		if($member) {
@@ -34,7 +34,7 @@ class UsernameAuthenticator extends Authenticator {
 		} else {
 			$result = new ValidationResult(false, _t('Member.ERRORWRONGCRED'));
 		}
-		if($member && !$result->valid()) { 
+		if($member && !$result->valid()) {
 			$member->registerFailedLogin();
 			$member = false;
 		}
@@ -88,7 +88,7 @@ class UsernameAuthenticator extends Authenticator {
 		);
     } else {
 		if($form) $form->sessionMessage(
-			"That doesn't seem to be the right username or password. Please try again.",
+			_t('Member.ERRORWRONGCREDENTIALS', "That doesn't seem to be the right username or password. Please try again."),
 			"bad"
 		);
 	}
