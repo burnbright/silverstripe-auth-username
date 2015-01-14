@@ -1,7 +1,7 @@
 <?php
 /**
  * Alternative username authentication method.
- * 
+ *
  * @author Jeremy Shipman <jeremy@burnbright.co.nz> www.burnbright.co.nz
  **/
 class UsernameAuthenticator extends Authenticator {
@@ -24,12 +24,19 @@ class UsernameAuthenticator extends Authenticator {
 	// Default login (see Security::setDefaultAdmin())
 	if(Security::check_default_admin($RAW_data['Username'], $RAW_data['Password'])) {
 		$member = Security::findAnAdministrator();
-	} else {		
-		$member = DataObject::get_one("Member", "Username = '$SQL_user' AND Password IS NOT NULL"); // "Username" used here instead of "Email"
-		if($member && ($member->checkPassword($RAW_data['Password']) == false)) { 
-			if($member->isLockedOut()) $isLockedOut = true;
+	} else {
+                $member = DataObject::get_one(
+			"Member",
+			"\"username\" = '$SQL_user' AND \"Password\" IS NOT NULL"
+		);
+		if($member) {
+			$result = $member->checkPassword($RAW_data['Password']);
+		} else {
+			$result = new ValidationResult(false, _t('Member.ERRORWRONGCRED'));
+		}
+		if($member && !$result->valid()) {
 			$member->registerFailedLogin();
-			$member = null;
+			$member = false;
 		}
 	}
 	
@@ -81,7 +88,7 @@ class UsernameAuthenticator extends Authenticator {
 		);
     } else {
 		if($form) $form->sessionMessage(
-			"That doesn't seem to be the right username or password. Please try again.",
+			_t('Member.ERRORWRONGCREDENTIALS', "That doesn't seem to be the right username or password. Please try again."),
 			"bad"
 		);
 	}

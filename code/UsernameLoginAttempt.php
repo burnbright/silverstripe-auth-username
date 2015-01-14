@@ -2,17 +2,10 @@
 /**
  * Add username to login recording.
  */
-class UsernameLoginAttempt extends DataObjectDecorator {
+class UsernameLoginAttempt extends DataExtension {
 	
-	function extraStatics(){
-	
-		return array(
-			'db' => array(
-				'Username' => 'Varchar(255)' 
-			)
-		);
-	
-	}
+	static $db = array(
+		'Username' => 'Varchar(255)'
+	);
 		
 }
-?>

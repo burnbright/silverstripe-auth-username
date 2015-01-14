@@ -2,11 +2,11 @@
 
 /**
  * UsernameSecurity is an extension of Security, to allow requesting and sending out lost usernames or passwords.
- * 
+ *
  * @author Jeremy Shipman <jeremy@burnbright.co.nz> www.burnbright.co.nz
  */
 
-class UsernameSecurity extends Security{
+class UsernameSecurity extends Security {
 	
 	
 	/**
@@ -29,12 +29,12 @@ class UsernameSecurity extends Security{
 		$controller->init();
 
 		$customisedController = $controller->customise(array(
-			'Content' => 
-				'<p>' . 
+			'Content' =>
+				'<p>' .
 				_t(
-					'Security.USERNAMENOTERESETPASSWORD', 
+					'Security.USERNAMENOTERESETPASSWORD',
 					'Enter your username to be sent a password reset link, or enter your email in the box below to be sent your username.'
-				) . 
+				) .
 				'</p>',
 			'Form' => $this->LostPasswordForm()->forTemplate().'<br/>'.$this->LostUsernameForm()->forTemplate()
 		));
@@ -48,7 +48,7 @@ class UsernameSecurity extends Security{
 	 * @param string $action Name of the action
 	 * @return string Returns the link to the given action
 	 */
-	public static function Link($action = null) {
+	public function Link($action = null) {
 		return "UsernameSecurity/$action";
 	}
 	
@@ -65,10 +65,10 @@ class UsernameSecurity extends Security{
 		return new UsernameLoginForm(
 			$this,
 			'LostPasswordForm',
-			new FieldSet(
+			new FieldList(
 				new TextField('Username', _t('Member.USERNAME', 'Username'))
 			),
-			new FieldSet(
+			new FieldList(
 				new FormAction(
 					'forgotPassword',
 					_t('Security.BUTTONSEND', 'Send me the password reset link')
@@ -84,10 +84,10 @@ class UsernameSecurity extends Security{
 		return new UsernameLoginForm(
 			$this,
 			'LostUsernameForm',
-			new FieldSet(
+			new FieldList(
 				new TextField('Email', _t('Member.EMAIL', 'Email'))
 			),
-			new FieldSet(
+			new FieldList(
 				new FormAction(
 					'forgotUsername',
 					_t('Security.USERNAMESEND', 'Send me my usernames')
@@ -102,22 +102,24 @@ class UsernameSecurity extends Security{
 	 * Show the "password sent" page, after a user has requested
 	 * to reset their password.
 	 *
-	 * @param HTTPRequest $request The HTTPRequest for this action. 
+	 * @param HTTPRequest $request The HTTPRequest for this action.
 	 * @return string Returns the "password sent" page as HTML code.
 	 */
 	public function passwordsent($request) {
-		Requirements::javascript(THIRDPARTY_DIR . '/behaviour.js');
-		Requirements::javascript(THIRDPARTY_DIR . '/loader.js');
-		Requirements::javascript(THIRDPARTY_DIR . '/prototype.js');
-		Requirements::javascript(THIRDPARTY_DIR . '/prototype_improvements.js');
-		Requirements::javascript(THIRDPARTY_DIR . '/scriptaculous/effects.js');
+		
+		if(class_exists('SiteTree')) {
+			$tmpPage = new Page();
+			$tmpPage->Title = _t('Security.CHANGEPASSWORDHEADER', 'Change your password');
+			$tmpPage->URLSegment = 'Security';
+			$tmpPage->ID = -1 * rand(1,10000000);
+			$controller = Page_Controller::create($tmpPage);
+			$controller->init();
+		} else {
+			$controller = $this;
+		}
 
-		$tmpPage = new Page();
-		$tmpPage->Title = _t('Security.LOSTPASSWORDHEADER');
-		$tmpPage->URLSegment = 'UsernameSecurity';
-		$tmpPage->ID = -1;
-		$controller = new Page_Controller($tmpPage);
-		$controller->init();
+		// if the controller calls Director::redirect(), this will break early
+		if(($response = $controller->getResponse()) && $response->isFinished()) return $response;
 
 		$username = (Session::get('ForgotUsername')) ? Convert::raw2xml(Session::get('ForgotUsername')) : null;
 		Session::clear('ForgotUsername');
@@ -125,43 +127,47 @@ class UsernameSecurity extends Security{
 		$customisedController = $controller->customise(array(
 			'Title' => _t('Security.USERNAMEPASSWORDSENTHEADER', "Password reset link has been sent"),
 			'Content' =>
-				"<p>" . 
+				"<p>" .
 				sprintf(_t('Security.USERNAMEPASSWORDSENTTEXT', "Password reset link has been sent do the email associated with: '%s'"), $username) .
 				"</p>",
 		));
 		
-		//Controller::$currentController = $controller;
-		return $customisedController->renderWith(array('Security_passwordsent', 'Security', $this->stat('template_main')));
+		return $customisedController->renderWith(
+			array('Security_passwordsent', 'Security', $this->stat('template_main'), 'BlankPage')
+		);
 	}
 	
 	
 	public function usernamesent($request) {
-		Requirements::javascript(THIRDPARTY_DIR . '/behaviour.js');
-		Requirements::javascript(THIRDPARTY_DIR . '/loader.js');
-		Requirements::javascript(THIRDPARTY_DIR . '/prototype.js');
-		Requirements::javascript(THIRDPARTY_DIR . '/prototype_improvements.js');
-		Requirements::javascript(THIRDPARTY_DIR . '/scriptaculous/effects.js');
-
-		$tmpPage = new Page();
-		$tmpPage->Title = _t('Security.LOSTPASSWORDHEADER');
-		$tmpPage->URLSegment = 'UsernameSecurity';
-		$tmpPage->ID = -1;
-		$controller = new Page_Controller($tmpPage);
-		$controller->init();
 		
+		if(class_exists('SiteTree')) {
+			$tmpPage = new Page();
+			$tmpPage->Title = _t('Security.CHANGEPASSWORDHEADER', 'Change your password');
+			$tmpPage->URLSegment = 'Security';
+			$tmpPage->ID = -1 * rand(1,10000000);
+			$controller = Page_Controller::create($tmpPage);
+			$controller->init();
+		} else {
+			$controller = $this;
+		}
+
+		// if the controller calls Director::redirect(), this will break early
+		if(($response = $controller->getResponse()) && $response->isFinished()) return $response;
+
 		$email = (Session::get('ForgotEmail')) ? Convert::raw2xml(Session::get('ForgotEmail')) : null;
 		Session::clear('ForgotEmail');
 		
 		$customisedController = $controller->customise(array(
 			'Title' => _t('Security.USERNAMESENTHEADER', "Username sent"),
 			'Content' =>
-				"<p>" . 
+				"<p>" .
 				sprintf(_t('Security.USERNAMESENTTEXT', "Username has been sent to: '%s'"), $email) .
 				"</p>",
 		));
 		
-		//Controller::$currentController = $controller;
-		return $customisedController->renderWith(array('Security_passwordsent', 'Security', $this->stat('template_main')));
+		return $customisedController->renderWith(
+			array('Security_usernamesent', 'Security', $this->stat('template_main'), 'BlankPage')
+		);
 	}
 	
 	

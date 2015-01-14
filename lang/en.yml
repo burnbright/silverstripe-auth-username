@@ -1,0 +1,23 @@
+en:
+  ForgotUsernameEmail.ss:
+    HELLO: Hi
+  Member:
+    EMAIL: Email
+    ENTERUSERNAME: 'Please enter a username to get a password reset link.'
+    ENTERUSERNAMEEMAIL: 'Please enter an email address to get usernames.'
+    ERRORLOCKEDOUT: 'Your account has been temporarily disabled because of too many failed attempts at logging in. Please try again in 20 minutes.'
+    ERRORSIGNUP: 'Sorry, but I don''t recognise the email. Try again, or contact us to resolve this.'
+    ERRORWRONGCREDENTIALS: 'That doesn't seem to be the right username or password. Please try again.'
+    SUBJECTUSERNAME: 'Your username'
+    USERNAME: Username
+    WELCOMEBACK: 'Welcome Back, %s'
+  Security:
+    BUTTONSEND: 'Send me the password reset link'
+    LOSTUSERNAMEPASSWORDHEADER: 'Lost Username or Password'
+    LOSTUSERNAMEPASSWORD: 'Lost Username or Password'
+    USERNAMENOTERESETPASSWORD: 'Enter your username to be sent a password reset link, or enter your email in the box below to be sent your username.'
+    USERNAMEPASSWORDSENTHEADER: 'Password reset link has been sent'
+    USERNAMEPASSWORDSENTTEXT: 'Password reset link has been sent do the email associated with: ''%s'''
+    USERNAMESEND: 'Send me my usernames'
+    USERNAMESENTHEADER: 'Username sent'
+    USERNAMESENTTEXT: 'Username has been sent to: ''%s'''

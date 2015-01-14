@@ -2,7 +2,7 @@
 
 <p></p><strong>Usernames associated with $Email:</strong></p>
 <ul>
-<% control Members %>
+<% loop Members %>
 <li>$Username</li>
-<% end_control %>
+<% end_loop %>
 </ul>
