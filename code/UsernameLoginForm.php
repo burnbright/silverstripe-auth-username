@@ -1,13 +1,10 @@
 <?php
 /**
  * Login form for username login
- * 
- * @author Jeremy Shipman <jeremy@burnbright.co.nz> www.burnbright.co.nz
  */
 class UsernameLoginForm extends MemberLoginForm {
 
 	protected $authenticator_class = 'UsernameAuthenticator';
-	
 	
 	function __construct($controller, $name, $fields = null, $actions = null,$checkCurrentUser = true) {
 		
@@ -117,8 +114,6 @@ class UsernameLoginForm extends MemberLoginForm {
 		}
 	}
 	
-	
-
 	/**
 	 * Forgot password form handler method
 	 *
@@ -126,7 +121,7 @@ class UsernameLoginForm extends MemberLoginForm {
 	 *
 	 * @param array $data Submitted data
 	 */
-	function forgotPassword($data) {
+	public function forgotPassword($data) {
 		$SQL_data = Convert::raw2sql($data);
 		$SQL_username = $SQL_data['Username'];
 		$member = DataObject::get_one('Member', "Username = '{$SQL_username}'");
@@ -160,7 +155,7 @@ class UsernameLoginForm extends MemberLoginForm {
 		}
 	}
 	
-	function forgotUsername($data) {
+	public function forgotUsername($data) {
 		$SQL_data = Convert::raw2sql($data);
 		$SQL_email = $SQL_data['Email'];
 		$members = DataObject::get('Member', "Email = '{$SQL_email}'");
@@ -192,8 +187,5 @@ class UsernameLoginForm extends MemberLoginForm {
 			
 			$this->Controller()->redirect('UsernameSecurity/amnesia');
 		}
-	}
-
-	
+	}	
 }
-?>

@@ -4,7 +4,7 @@
  */
 class UsernameLoginAttempt extends DataExtension {
 	
-	static $db = array(
+	private static $db = array(
 		'Username' => 'Varchar(255)'
 	);
 		

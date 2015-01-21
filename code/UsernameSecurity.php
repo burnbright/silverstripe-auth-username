@@ -3,11 +3,8 @@
 /**
  * UsernameSecurity is an extension of Security, to allow requesting and sending out lost usernames or passwords.
  * 
- * @author Jeremy Shipman <jeremy@burnbright.co.nz> www.burnbright.co.nz
  */
-
 class UsernameSecurity extends Security{
-	
 	
 	/**
 	 * Show the "lost password / lost username" page
@@ -51,8 +48,6 @@ class UsernameSecurity extends Security{
 	public static function Link($action = null) {
 		return "UsernameSecurity/$action";
 	}
-	
-
 
 	/**
 	 * Factory method for the lost password form
@@ -60,7 +55,6 @@ class UsernameSecurity extends Security{
 	 * @return Form Returns the lost password form
 	 */
 	public function LostPasswordForm() {
-		
 		
 		return new UsernameLoginForm(
 			$this,
@@ -76,7 +70,6 @@ class UsernameSecurity extends Security{
 			),
 			false
 		);
-		
 		
 	}
 	
@@ -97,8 +90,7 @@ class UsernameSecurity extends Security{
 		);
 	}
 	
-	
-		/**
+	/**
 	 * Show the "password sent" page, after a user has requested
 	 * to reset their password.
 	 *
@@ -160,12 +152,7 @@ class UsernameSecurity extends Security{
 				"</p>",
 		));
 		
-		//Controller::$currentController = $controller;
 		return $customisedController->renderWith(array('Security_passwordsent', 'Security', $this->stat('template_main')));
 	}
 	
-	
-	
 }
-
-?>

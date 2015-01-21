@@ -1,20 +1,19 @@
 <?php
+
 /**
  * Member decorator to add a Username database field.
- * 
- * @author Jeremy Shipman <jeremy@burnbright.co.nz> www.burnbright.co.nz
  */
 class UsernameMemberDecorator extends DataExtension{
 	
-	static $db = array(
-					'Username' => 'Varchar'
-				);
+	private static $db = array(
+		'Username' => 'Varchar'
+	);
 	
 	/**
 	 * Generates a username in the form: FSurname , where F is the first letter of the member's first name
 	 * More of the first name is added if that username is already taken
 	 */
-	function generateUsername(){
+	public function generateUsername() {
 		$member = $this->getOwner();	
 		$count = 1;
 		do{
@@ -26,7 +25,7 @@ class UsernameMemberDecorator extends DataExtension{
 		return $username;
 	}
 	
-	function GenerateAndSetPassword(){
+	public function GenerateAndSetPassword() {
 		if(!Permission::check("ADMIN")){return false;}
 		$member = $this->getOwner();
 		$password = substr(md5(microtime()),0,6);
