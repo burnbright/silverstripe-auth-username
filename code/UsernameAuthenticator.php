@@ -4,7 +4,7 @@
  *
  * @author Jeremy Shipman <jeremy@burnbright.co.nz> www.burnbright.co.nz
  **/
-class UsernameAuthenticator extends Authenticator {
+class UsernameAuthenticator extends MemberAuthenticator {
 	
 	/**
 	 * Attempt to find and authenticate member if possible from the given data
@@ -110,41 +110,6 @@ class UsernameAuthenticator extends Authenticator {
 		$attempt->IP = Controller::curr()->getRequest()->getIP();
 		$attempt->write();
 	}
-	
-	/**
-	 * Method to authenticate an user
-	 *
-	 * @param array $RAW_data Raw data to authenticate the user
-	 * @param Form $form Optional: If passed, better error messages can be
-	 *														 produced by using
-	 *														 {@link Form::sessionMessage()}
-	 * @return bool|Member Returns FALSE if authentication fails, otherwise
-	 *										 the member object
-	 * @see Security::setDefaultAdmin()
-	 */
-	public static function authenticate($data, Form $form = null) {
-		// Find authenticated member
-		$member = static::authenticate_member($data, $form, $success);
-		
-		// Optionally record every login attempt as a {@link LoginAttempt} object
-		static::record_login_attempt($data, $member, $success);
-		
-		// Legacy migration to precision-safe password hashes.
-		// A login-event with cleartext passwords is the only time
-		// when we can rehash passwords to a different hashing algorithm,
-		// bulk-migration doesn't work due to the nature of hashing.
-		// See PasswordEncryptor_LegacyPHPHash class.
-		if($success && $member && isset(self::$migrate_legacy_hashes[$member->PasswordEncryption])) {
-			$member->Password = $data['Password'];
-			$member->PasswordEncryption = self::$migrate_legacy_hashes[$member->PasswordEncryption];
-			$member->write();
-		}
-
-		if($success) Session::clear('BackURL');
-
-		return $success ? $member : null;
-	}
-	
 	
 	/**
 	 * Method that creates the login form for this authentication method
