@@ -1,0 +1,4 @@
+Member:
+  unique_identifier_field: Username
+  extensions:
+    - UsernameMemberExtension

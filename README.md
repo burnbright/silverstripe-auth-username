@@ -3,8 +3,6 @@
 This module introduces username authentication to SilverStripe.
 It also provides additional functionality for retrieving usernames and password.
 
-Please note that SilverStripe has been originally built with Email being the primary form of authentication, so some core/module features may not work so well. I have included a patch for giving MemberTableField support for usernames.
-
 ##  Set Up
 
 Copy the module folder to your SilverStripe site's root directory.

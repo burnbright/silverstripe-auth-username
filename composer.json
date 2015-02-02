@@ -1,0 +1,16 @@
+{
+  "name": "burnbright/silverstripe-auth-username",
+  "description": "Adds username authentication and username or email login to a silverstripe install",
+  "type": "silverstripe-module",
+    "keywords": ["silverstripe", "auth", "authentication", "username"],
+    "license": "BSD-3-Clause",
+    "support": {
+        "issues": "https://github.com/burnbright/silverstripe-auth-username/issues"
+    },
+    "require": {
+        "silverstripe/framework": ">=3.1"
+    },
+    "extra": {
+        "installer-name": "auth_username"
+    }
+}
