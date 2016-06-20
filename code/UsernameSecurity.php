@@ -7,7 +7,14 @@
  */
 
 class UsernameSecurity extends Security {
-	
+    
+    private static $allowed_actions = array(
+		'amnesia',
+		'usernamesent',
+		'passwordsent',
+		'LostUsernameForm',
+		'LostPasswordForm',
+	);
 	
 	/**
 	 * Show the "lost password / lost username" page
@@ -15,11 +22,6 @@ class UsernameSecurity extends Security {
 	 * @return string Returns the "lost password" page as HTML code.
 	 */
 	public function amnesia() {
-		Requirements::javascript(THIRDPARTY_DIR . '/prototype.js');
-		Requirements::javascript(THIRDPARTY_DIR . '/behaviour.js');
-		Requirements::javascript(THIRDPARTY_DIR . '/loader.js');
-		Requirements::javascript(THIRDPARTY_DIR . '/prototype_improvements.js');
-		Requirements::javascript(THIRDPARTY_DIR . '/scriptaculous/effects.js');
 
 		$tmpPage = new Page();
 		$tmpPage->Title = _t('Security.LOSTUSERNAMEPASSWORDHEADER', 'Lost Username or Password');
@@ -49,7 +51,7 @@ class UsernameSecurity extends Security {
 	 * @return string Returns the link to the given action
 	 */
 	public function Link($action = null) {
-		return "UsernameSecurity/$action";
+		return Controller::join_links(Director::baseURL(), "UsernameSecurity", $action);
 	}
 	
 

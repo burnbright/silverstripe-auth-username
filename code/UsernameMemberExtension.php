@@ -4,7 +4,7 @@
  *
  * @author Jeremy Shipman <jeremy@burnbright.co.nz> www.burnbright.co.nz
  */
-class UsernameMemberDecorator extends DataExtension{
+class UsernameMemberExtension extends DataExtension{
 	
 	private static $db = array(
 		'Username' => 'Varchar'
