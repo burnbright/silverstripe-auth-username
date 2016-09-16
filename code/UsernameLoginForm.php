@@ -1,7 +1,7 @@
 <?php
 /**
  * Login form for username login
- * 
+ *
  * @author Jeremy Shipman <jeremy@burnbright.co.nz> www.burnbright.co.nz
  */
 class UsernameLoginForm extends MemberLoginForm {
@@ -72,9 +72,9 @@ class UsernameLoginForm extends MemberLoginForm {
 				
 				$this->Controller()->redirect('Security/changepassword');
 			} elseif(
-				isset($_REQUEST['BackURL']) 
-				&& $_REQUEST['BackURL'] 
-				// absolute redirection URLs may cause spoofing 
+				isset($_REQUEST['BackURL'])
+				&& $_REQUEST['BackURL']
+				// absolute redirection URLs may cause spoofing
 				&& Director::is_site_url($_REQUEST['BackURL'])
 			) {
 				$this->Controller()->redirect($_REQUEST['BackURL']);
@@ -91,7 +91,7 @@ class UsernameLoginForm extends MemberLoginForm {
 					}
 					
 					Session::set('Security.Message.message',
-						sprintf(_t('Member.WELCOMEBACK', "Welcome Back, %s"), $firstname) 
+						sprintf(_t('Member.WELCOMEBACK', "Welcome Back, %s"), $firstname)
 					);
 					Session::set("Security.Message.type", "good");
 				}
@@ -101,17 +101,17 @@ class UsernameLoginForm extends MemberLoginForm {
 			Session::set('SessionForms.MemberLoginForm.Username', $data['Username']);
 			Session::set('SessionForms.MemberLoginForm.Remember', isset($data['Remember']));
 
-			if(isset($_REQUEST['BackURL'])) $backURL = $_REQUEST['BackURL']; 
-			else $backURL = null; 
+			if(isset($_REQUEST['BackURL'])) $backURL = $_REQUEST['BackURL'];
+			else $backURL = null;
 
-		 	if($backURL) Session::set('BackURL', $backURL);			
+		 	if($backURL) Session::set('BackURL', $backURL);
 			
 			if($badLoginURL = Session::get("BadLoginURL")) {
 				$this->Controller()->redirect($badLoginURL);
 			} else {
 				// Show the right tab on failed login
-				$loginLink = Director::absoluteURL(Security::Link("login")); 
-				if($backURL) $loginLink .= '?BackURL=' . urlencode($backURL); 
+				$loginLink = Director::absoluteURL(Security::Link("login"));
+				if($backURL) $loginLink .= '?BackURL=' . urlencode($backURL);
 				$this->Controller()->redirect($loginLink . '#' . $this->FormName() .'_tab');
 			}
 		}
@@ -132,27 +132,26 @@ class UsernameLoginForm extends MemberLoginForm {
 		$member = DataObject::get_one('Member', "Username = '{$SQL_username}'");
 
 		if($member) {
-			$member->generateAutologinHash();
+			$token = $member->generateAutologinTokenAndStoreHash();
 
-			$member->sendInfo(
-				'forgotPassword',
-				array(
-					'PasswordResetLink' => Security::getPasswordResetLink($member->AutoLoginHash)
-				)
-			);
-			Session::set('ForgotUsername',$data['Username']);
-			$this->Controller()->redirect('UsernameSecurity/passwordsent/');
-		} elseif($data['Username']) {
-			$this->sessionMessage(
-				_t('Member.ERRORSIGNUP', 'Sorry, but I don\'t recognise the username. Try again, or contact us to resolve this.'
-				),
-				'bad'
-			);
+			$e = Member_ForgotPasswordEmail::create();
+			$e->populateTemplate($member);
+			$e->populateTemplate(array(
+				'PasswordResetLink' => Security::getPasswordResetLink($member, $token)
+			));
+			$e->setTo($member->Email);
+			$e->send();
 			
-			$this->Controller()->redirectBack();
+			Session::set('ForgotUsername',$SQL_username);
+
+			$this->controller->redirect('UsernameSecurity/passwordsent/');
+		} elseif($data['Username']) {
+			// Avoid information disclosure by displaying the same status,
+			// regardless wether the email address actually exists
+			$this->controller->redirect('UsernameSecurity/passwordsent/');
 		} else {
 			$this->sessionMessage(
-				_t('Member.ENTEREMAIL', 'Please enter a username address to get a password reset link.'),
+				_t('Member.ENTERUSERNAME', 'Please enter a username to get a password reset link.'),
 				'bad'
 			);
 			
@@ -165,7 +164,7 @@ class UsernameLoginForm extends MemberLoginForm {
 		$SQL_email = $SQL_data['Email'];
 		$members = DataObject::get('Member', "Email = '{$SQL_email}'");
 
-		if($members) {
+		if($members && $members->exists()) {
 
 			$member = $members->First();
 			$e = Object::create('MemberForgotUsernameEmail');

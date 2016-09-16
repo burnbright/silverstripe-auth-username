@@ -1,0 +1,23 @@
+de:
+  ForgotUsernameEmail.ss:
+    HELLO: Hallo
+  Member:
+    EMAIL: Email
+    ENTERUSERNAME: 'Bitte geben Sie einen Benutzernamen ein um einen Link zu erhalten um das Passwort zurückzusetzen.'
+    ENTERUSERNAMEEMAIL: 'Bitte geben Sie eine Email-Adresse ein um Ihren Benutzernamen zu erhalten.'
+    ERRORLOCKEDOUT: 'Ihr Konto wurde vorübergehend gesperrt wegen zu vieler erfolgloser Anmeldeversuchen. Bitte versuchen Sie es in 20 Minuten nochmals.'
+    ERRORSIGNUP: 'Ihre Emaail-Adresse wurde nicht erkannt. Bitte versuchen Sie es nochmals oder kontaktieren Sie uns um das Problem zu beheben.'
+    ERRORWRONGCREDENTIALS: 'Der Benutzername oder das Password ist falsch. Bitte versuchen Sie es noch einmal.'
+    SUBJECTUSERNAME: 'Ihr Benutzername'
+    USERNAME: Benutzername
+    WELCOMEBACK: 'Willkommen zurück, %s'
+  Security:
+    BUTTONSEND: 'Senden Sie mir den Link zum Zurücksetzen meines Passworts'
+    LOSTUSERNAMEPASSWORDHEADER: 'Benutzername oder Passwort vergessen'
+    LOSTUSERNAMEPASSWORD: 'Benutzername oder Passwort vergessen'
+    USERNAMENOTERESETPASSWORD: 'Geben Sie Ihren Benutzernamen ein um das Passwort zurückzusetzen, oder geben Sie Ihre Email-Adresse ein um Ihren Benutzernamen zu erhalten.'
+    USERNAMEPASSWORDSENTHEADER: 'Der Link zum Zurücksetzen Ihres Passworts wurde verschickt.'
+    USERNAMEPASSWORDSENTTEXT: 'Der Link zum Zurücksetzen des Passworts wurde an die Email-Adresse verschickt welche mit ''%s'' assoziiert ist.'
+    USERNAMESEND: 'Senden Sie mir meinen Benutzernamen'
+    USERNAMESENTHEADER: 'Benutzername verschickt'
+    USERNAMESENTTEXT: 'Der Benutzername wurde an ''%s'' verschickt'
