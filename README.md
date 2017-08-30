@@ -18,7 +18,3 @@ In your site _config.php optionally add either of the following:
 Authenticator::set_default_authenticator("UsernameAuthenticator"); // makes username authentication default
 Authenticator::unregister("MemberAuthenticator"); // removes default email + password authentication
 ```
-
-## Maintainer
-
- * Jeremy Shipman <jeremy@burnbright.net>
